@@ -135,7 +135,6 @@ def match_appid(game_data, demo_data):
 def print_match_data(match_data, output_filename=None):
     base_steam_store_url = "http://store.steampowered.com/app/"
     steam_install_command = "steam://install/"
-    width = 40
 
     computeScore = lambda x: x["wilson_score"]
 
@@ -155,17 +154,44 @@ def print_match_data(match_data, output_filename=None):
 
         if output_filename is None:
             print('{:04}'.format(current_rank) + ".\t[" + game_name + "](" + game_url + ")"
-                  + " -> [demo](" + demo_url + ")")
+                  + " -> [demo](" + demo_url + ") + " + demo_install_command)
         else:
             with open(output_filename, 'a', encoding="utf8") as outfile:
                 print('{:04}'.format(current_rank) + ".\t[" + game_name + "](" + game_url + ")"
                       + " -> [demo](" + demo_url + ") + " + demo_install_command, file=outfile)
+
+def print_unmatched_data(unused_demo_data, output_filename=None):
+    base_steam_store_url = "http://store.steampowered.com/app/"
+    steam_install_command = "steam://install/"
+
+    computeScore = lambda x: x["game_name"]
+
+    # Rank all the Steam games
+    sortedValues = sorted(unused_demo_data.values(), key=computeScore)
+
+    current_rank = 0
+    for demo in sortedValues:
+        demo_appid = str(demo["appid"])
+        game_name = demo["game_name"]
+        current_rank += 1
+
+        demo_url = base_steam_store_url + demo_appid
+        demo_install_command = steam_install_command + demo_appid
+
+        if output_filename is None:
+            print('{:04}'.format(current_rank) + ".\t[" + game_name + "]("
+                  + demo_url + ")  + " + demo_install_command)
+        else:
+            with open(output_filename, 'a', encoding="utf8") as outfile:
+                print('{:04}'.format(current_rank) + ".\t[" + game_name + "]("
+                      + demo_url + ")  + " + demo_install_command, file=outfile)
 
 
 if __name__ == "__main__":
     game_filename = "top_rated_games_on_steam.txt"
     demo_filename = "demo_on_steam.txt"
     output_filename = "wilson_ranking.txt"
+    error_filename = "unmatched_demos.txt"
 
     games = load_game_file(game_filename)
     demos = load_demo_file(demo_filename)
@@ -174,3 +200,6 @@ if __name__ == "__main__":
 
     with open(output_filename, 'w', encoding="utf8") as outfile:
         print_match_data(matches, output_filename)
+
+    with open(error_filename, 'w', encoding="utf8") as outfile:
+        print_unmatched_data(unused_demo_data, error_filename)
