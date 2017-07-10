@@ -84,7 +84,9 @@ def load_demo_file(input_filename):
             elif "(" in demo_name:
                 game_name = demo_name.split("(")[-1].strip(")")
             else:
-                # print(demo_name)
+                # base_steam_store_url = "http://store.steampowered.com/app/"
+                # demo_url = base_steam_store_url + appid
+                # print("[" + demo_name + "](" + demo_url + ")")
                 continue
 
             demo_data[appid] = dict()
