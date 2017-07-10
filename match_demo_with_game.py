@@ -110,7 +110,17 @@ def match_appid(game_data, demo_data):
 
     print('#games matched with demos =', len(match_data))
 
-    return match_data
+    unused_demo_data = dict()
+
+    for demo in demo_data.values():
+        demo_appid = demo["appid"]
+        if not(demo_appid in [v["demo_appid"] for v in match_data.values()]):
+            unused_demo_data[str(demo_appid)] = dict()
+            unused_demo_data[str(demo_appid)] = demo_data[str(demo_appid)]
+
+    print('#demos not matched with any game=', len(unused_demo_data))
+
+    return (match_data, unused_demo_data)
 
 def print_match_data(match_data, output_filename=None):
     base_steam_store_url = "http://store.steampowered.com/app/"
@@ -148,9 +158,9 @@ if __name__ == "__main__":
     games = load_game_file(game_filename)
     demos = load_demo_file(demo_filename)
 
-    matches = match_appid(games, demos)
+    (matches, unused_demo_data) = match_appid(games, demos)
 
-    print_match_data(matches)
+    print(unused_demo_data)
 
     with open(output_filename, 'w', encoding="utf8") as outfile:
         print_match_data(matches, output_filename)
