@@ -134,6 +134,7 @@ def match_appid(game_data, demo_data):
 
 def print_match_data(match_data, output_filename=None):
     base_steam_store_url = "http://store.steampowered.com/app/"
+    steam_install_command = "steam://install/"
     width = 40
 
     computeScore = lambda x: x["wilson_score"]
@@ -150,6 +151,7 @@ def print_match_data(match_data, output_filename=None):
 
         game_url = base_steam_store_url + game_appid
         demo_url = base_steam_store_url + demo_appid
+        demo_install_command = steam_install_command + demo_appid
 
         if output_filename is None:
             print('{:04}'.format(current_rank) + ".\t[" + game_name + "](" + game_url + ")"
@@ -157,7 +159,7 @@ def print_match_data(match_data, output_filename=None):
         else:
             with open(output_filename, 'a', encoding="utf8") as outfile:
                 print('{:04}'.format(current_rank) + ".\t[" + game_name + "](" + game_url + ")"
-                      + " -> [demo](" + demo_url + ")", file=outfile)
+                      + " -> [demo](" + demo_url + ") + " + demo_install_command, file=outfile)
 
 
 if __name__ == "__main__":
