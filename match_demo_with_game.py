@@ -67,7 +67,7 @@ def load_demo_file(input_filename):
             demo_name = stripped_items[2]
 
             # Keywords not included in other keywords
-            unambiguous_keywords = ["Demo", "DEMO", "demo",
+            unambiguous_keywords = ["Demo", "DEMO", "demo", "Christmas Edition",
                                     "Free Trial", "[FREE TRIAL]", "DirectX10 Trial", "Lite",
                                     "Pre-Alpha", "Public Beta", "Press", "Playable Trailer"]
             # Short keywords included in a few longer keywords
@@ -83,11 +83,14 @@ def load_demo_file(input_filename):
                     game_name = game_name.split(keyword)[0].strip()
             elif "(" in demo_name:
                 game_name = demo_name.split("(")[-1].strip(")")
+            elif demo_name.lower()[-1] == "d":
+                game_name = demo_name[:-1].strip()
+                # print(demo_name)
             else:
-                # base_steam_store_url = "http://store.steampowered.com/app/"
-                # demo_url = base_steam_store_url + appid
+                base_steam_store_url = "http://store.steampowered.com/app/"
+                demo_url = base_steam_store_url + appid
                 # print("[" + demo_name + "](" + demo_url + ")")
-                continue
+                game_name = demo_name
 
             demo_data[appid] = dict()
             demo_data[appid]['appid'] = to_integer(appid)
