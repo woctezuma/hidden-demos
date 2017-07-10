@@ -100,27 +100,32 @@ def load_demo_file(input_filename):
 def match_appid(game_data, demo_data):
     match_data = dict()
 
-    for game in game_data.values():
-        if game["name"] in [v["game_name"] for v in demo_data.values()]:
-            demo_appid = [v["appid"] for v in demo_data.values() if game["name"] == v["game_name"]]
+    game_name_inferred_from_demo_name = [v["game_name"] for v in demo_data.values()]
 
-            appid = str(game["appid"])
+    for appid, game in game_data.items():
+        game_true_name = game["name"]
+        if game_true_name in game_name_inferred_from_demo_name:
+            demo_appid = [v["appid"] for v in demo_data.values() if (v["game_name"] == game_true_name)]
             match_data[appid] = game
             match_data[appid]["demo_appid"] = demo_appid[0]
 
     print('#games matched with demos =', len(match_data))
 
+    # Demo data not matched with any rated game is usually due to the fact the game is not released yet, and thus is not
+    # rated yet. Therefore, the game can exist and have a store page, but without being in top_rated_games_on_steam.txt.
+
     unused_demo_data = dict()
 
-    for demo in demo_data.values():
-        demo_appid = demo["appid"]
-        if not(demo_appid in [v["demo_appid"] for v in match_data.values()]):
-            unused_demo_data[str(demo_appid)] = dict()
-            unused_demo_data[str(demo_appid)] = demo_data[str(demo_appid)]
+    appid_for_matched_demo = [v["demo_appid"] for v in match_data.values()]
 
-    print('#demos not matched with any game=', len(unused_demo_data))
+    for demo_appid_str in demo_data.keys():
+        if demo_data[demo_appid_str]["appid"] not in appid_for_matched_demo:
+            unused_demo_data[demo_appid_str] = demo_data[demo_appid_str]
+
+    print('#demos not matched with any rated game=', len(unused_demo_data))
 
     return (match_data, unused_demo_data)
+
 
 def print_match_data(match_data, output_filename=None):
     base_steam_store_url = "http://store.steampowered.com/app/"
@@ -133,9 +138,9 @@ def print_match_data(match_data, output_filename=None):
 
     current_rank = 0
     for game in sortedValues:
-        game_appid = str( game["appid"] )
+        game_appid = str(game["appid"])
         game_name = game["name"]
-        demo_appid = str( game["demo_appid"] )
+        demo_appid = str(game["demo_appid"])
         current_rank += 1
 
         game_url = base_steam_store_url + game_appid
@@ -143,24 +148,22 @@ def print_match_data(match_data, output_filename=None):
 
         if output_filename is None:
             print('{:04}'.format(current_rank) + ".\t[" + game_name + "](" + game_url + ")"
-                  + " -> [demo](" + demo_url + ")" )
+                  + " -> [demo](" + demo_url + ")")
         else:
             with open(output_filename, 'a', encoding="utf8") as outfile:
                 print('{:04}'.format(current_rank) + ".\t[" + game_name + "](" + game_url + ")"
                       + " -> [demo](" + demo_url + ")", file=outfile)
+
 
 if __name__ == "__main__":
     game_filename = "top_rated_games_on_steam.txt"
     demo_filename = "demo_on_steam.txt"
     output_filename = "wilson_ranking.txt"
 
-
     games = load_game_file(game_filename)
     demos = load_demo_file(demo_filename)
 
     (matches, unused_demo_data) = match_appid(games, demos)
-
-    print(unused_demo_data)
 
     with open(output_filename, 'w', encoding="utf8") as outfile:
         print_match_data(matches, output_filename)
