@@ -6,7 +6,7 @@ def to_integer(my_str):
 
 
 def to_percentage(my_str):
-    return float(my_str.strip("%")) / 100
+    return float(my_str.strip('%')) / 100
 
 
 def load_game_file(input_filename):
@@ -14,7 +14,7 @@ def load_game_file(input_filename):
     #
     # Input:    input_filename
     # - a text file, manually copied from SteamDB at steamdb_game_url:
-    steamdb_game_url = "https://steamdb.info/stats/gameratings/?all"
+    steamdb_game_url = 'https://steamdb.info/stats/gameratings/?all'
     # NB: To download input_filename, you need to log in using your own Steam account on
     #     steamdb_game_url and then select to show all in the dropdown menu.
     #
@@ -23,9 +23,9 @@ def load_game_file(input_filename):
 
     game_data = dict()
 
-    with open(input_filename, 'r', encoding="utf8") as infile:
+    with open(input_filename, 'r', encoding='utf8') as infile:
         for line in infile:
-            items = line.strip().split("\t")
+            items = line.strip().split('\t')
             stripped_items = list(map(str.strip, items))
 
             appid = stripped_items[1]
@@ -49,7 +49,7 @@ def load_demo_file(input_filename, verbose=False):
     #
     # Input:    input_filename
     # - a text file, manually copied from SteamDB at steamdb_demo_url:
-    steamdb_demo_url = "https://steamdb.info/search/?a=app&q=&type=3&category=0"
+    steamdb_demo_url = 'https://steamdb.info/search/?a=app&q=&type=3&category=0'
     # NB: To download input_filename, you need to log in using your own Steam account on
     #     steamdb_demo_url and then select to show all in the dropdown menu.
     #
@@ -58,21 +58,21 @@ def load_demo_file(input_filename, verbose=False):
 
     demo_data = dict()
 
-    with open(input_filename, 'r', encoding="utf8") as infile:
+    with open(input_filename, 'r', encoding='utf8') as infile:
         for line in infile:
 
-            items = line.strip().split("\t")
+            items = line.strip().split('\t')
             stripped_items = list(map(str.strip, items))
 
             appid = stripped_items[0]
             demo_name = stripped_items[2]
 
             # Keywords not included in other keywords
-            unambiguous_keywords = ["Demo", "DEMO", "demo", "Christmas Edition",
-                                    "Free Trial", "[FREE TRIAL]", "DirectX10 Trial", "Lite",
-                                    "Pre-Alpha", "Public Beta", "Press", "Playable Trailer"]
+            unambiguous_keywords = ['Demo', 'DEMO', 'demo', 'Christmas Edition',
+                                    'Free Trial', '[FREE TRIAL]', 'DirectX10 Trial', 'Lite',
+                                    'Pre-Alpha', 'Public Beta', 'Press', 'Playable Trailer']
             # Short keywords included in a few longer keywords
-            ambiguous_keywords = ["Free", "Beta"]
+            ambiguous_keywords = ['Free', 'Beta']
 
             if any(keyword in demo_name for keyword in unambiguous_keywords):
                 game_name = demo_name
@@ -82,16 +82,17 @@ def load_demo_file(input_filename, verbose=False):
                 game_name = demo_name
                 for keyword in ambiguous_keywords:
                     game_name = game_name.split(keyword)[0].strip()
-            elif "(" in demo_name:
-                game_name = demo_name.split("(")[-1].strip(")")
-            elif demo_name.lower()[-1] == "d":
+            elif '(' in demo_name:
+                game_name = demo_name.split('(')[-1].strip(')')
+            elif demo_name.lower()[-1] == 'd':
                 game_name = demo_name[:-1].strip()
-                # print(demo_name)
+                if verbose:
+                    print('Demo name ends with a d:\t' + demo_name)
             else:
-                base_steam_store_url = "http://store.steampowered.com/app/"
+                base_steam_store_url = 'http://store.steampowered.com/app/'
                 demo_url = base_steam_store_url + appid
                 if verbose:
-                    print("[" + demo_name + "](" + demo_url + ")")
+                    print('Demo name is not explicit:\t' + '[' + demo_name + '](' + demo_url + ')')
                 game_name = demo_name
 
             demo_data[appid] = dict()
@@ -107,14 +108,14 @@ def load_demo_file(input_filename, verbose=False):
 def match_appid(game_data, demo_data):
     match_data = dict()
 
-    game_name_inferred_from_demo_name = [v["game_name"] for v in demo_data.values()]
+    game_name_inferred_from_demo_name = [v['game_name'] for v in demo_data.values()]
 
     for appid, game in game_data.items():
-        game_true_name = game["name"]
+        game_true_name = game['name']
         if game_true_name in game_name_inferred_from_demo_name:
-            demo_appid = [v["appid"] for v in demo_data.values() if (v["game_name"] == game_true_name)]
+            demo_appid = [v['appid'] for v in demo_data.values() if (v['game_name'] == game_true_name)]
             match_data[appid] = game
-            match_data[appid]["demo_appid"] = demo_appid[0]
+            match_data[appid]['demo_appid'] = demo_appid[0]
 
     print('#games matched with demos =', len(match_data))
 
@@ -123,10 +124,10 @@ def match_appid(game_data, demo_data):
 
     unused_demo_data = dict()
 
-    appid_for_matched_demo = [v["demo_appid"] for v in match_data.values()]
+    appid_for_matched_demo = [v['demo_appid'] for v in match_data.values()]
 
     for demo_appid_str in demo_data.keys():
-        if demo_data[demo_appid_str]["appid"] not in appid_for_matched_demo:
+        if demo_data[demo_appid_str]['appid'] not in appid_for_matched_demo:
             unused_demo_data[demo_appid_str] = demo_data[demo_appid_str]
 
     print('#demos not matched with any rated game=', len(unused_demo_data))
@@ -135,25 +136,25 @@ def match_appid(game_data, demo_data):
 
 
 def get_wilson_score(x):
-    return x["wilson_score"]
+    return x['wilson_score']
 
 
 def get_game_name(x):
-    return x["game_name"]
+    return x['game_name']
 
 
 def print_match_data(match_data, output_filename=None):
-    base_steam_store_url = "http://store.steampowered.com/app/"
-    steam_install_command = "steam://install/"
+    base_steam_store_url = 'http://store.steampowered.com/app/'
+    steam_install_command = 'steam://install/'
 
     # Rank all the Steam games
     sorted_values = sorted(match_data.values(), key=get_wilson_score, reverse=True)
 
     current_rank = 0
     for game in sorted_values:
-        game_appid = str(game["appid"])
-        game_name = game["name"]
-        demo_appid = str(game["demo_appid"])
+        game_appid = str(game['appid'])
+        game_name = game['name']
+        demo_appid = str(game['demo_appid'])
         current_rank += 1
 
         game_url = base_steam_store_url + game_appid
@@ -161,58 +162,58 @@ def print_match_data(match_data, output_filename=None):
         demo_install_command = steam_install_command + demo_appid
 
         if output_filename is None:
-            print('{:04}'.format(current_rank) + ".\t[" + game_name + "](" + game_url + ")"
-                  + " -> [demo](" + demo_url + ") + " + demo_install_command)
+            print('{:04}'.format(current_rank) + '.\t[' + game_name + '](' + game_url + ')'
+                  + ' -> [demo](' + demo_url + ') + ' + demo_install_command)
         else:
-            with open(output_filename, 'a', encoding="utf8") as outfile:
-                print('{:04}'.format(current_rank) + ".\t[" + game_name + "](" + game_url + ")"
-                      + " -> [demo](" + demo_url + ") + " + demo_install_command, file=outfile)
+            with open(output_filename, 'a', encoding='utf8') as outfile:
+                print('{:04}'.format(current_rank) + '.\t[' + game_name + '](' + game_url + ')'
+                      + ' -> [demo](' + demo_url + ') + ' + demo_install_command, file=outfile)
 
 
 def print_unmatched_data(unused_demo_data, output_filename=None):
-    base_steam_store_url = "http://store.steampowered.com/app/"
-    steam_install_command = "steam://install/"
+    base_steam_store_url = 'http://store.steampowered.com/app/'
+    steam_install_command = 'steam://install/'
 
     # Rank all the Steam games
     sorted_values = sorted(unused_demo_data.values(), key=get_game_name)
 
     current_rank = 0
     for demo in sorted_values:
-        demo_appid = str(demo["appid"])
-        game_name = demo["game_name"]
+        demo_appid = str(demo['appid'])
+        game_name = demo['game_name']
         current_rank += 1
 
         demo_url = base_steam_store_url + demo_appid
         demo_install_command = steam_install_command + demo_appid
 
         if output_filename is None:
-            print('{:04}'.format(current_rank) + ".\t[" + game_name + "]("
-                  + demo_url + ")  + " + demo_install_command)
+            print('{:04}'.format(current_rank) + '.\t[' + game_name + ']('
+                  + demo_url + ')  + ' + demo_install_command)
         else:
-            with open(output_filename, 'a', encoding="utf8") as outfile:
-                print('{:04}'.format(current_rank) + ".\t[" + game_name + "]("
-                      + demo_url + ")  + " + demo_install_command, file=outfile)
+            with open(output_filename, 'a', encoding='utf8') as outfile:
+                print('{:04}'.format(current_rank) + '.\t[' + game_name + ']('
+                      + demo_url + ')  + ' + demo_install_command, file=outfile)
 
 
-def main():
-    game_filename = "top_rated_games_on_steam.txt"
-    demo_filename = "demo_on_steam.txt"
-    output_filename = "wilson_ranking.txt"
-    error_filename = "unmatched_demos.txt"
+def main(verbose=False):
+    game_filename = 'top_rated_games_on_steam.txt'
+    demo_filename = 'demo_on_steam.txt'
+    output_filename = 'wilson_ranking.txt'
+    error_filename = 'unmatched_demos.txt'
 
     games = load_game_file(game_filename)
-    demos = load_demo_file(demo_filename)
+    demos = load_demo_file(demo_filename, verbose)
 
     (matches, unused_demo_data) = match_appid(games, demos)
 
-    with open(output_filename, 'w', encoding="utf8") as _:
+    with open(output_filename, 'w', encoding='utf8') as _:
         print_match_data(matches, output_filename)
 
-    with open(error_filename, 'w', encoding="utf8") as _:
+    with open(error_filename, 'w', encoding='utf8') as _:
         print_unmatched_data(unused_demo_data, error_filename)
 
     return True
 
 
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    main(True)
