@@ -1,5 +1,6 @@
 # Objective: match the appid of demos and games.
 
+
 def to_integer(my_str):
     return int(my_str.replace(',', ''))
 
@@ -43,7 +44,7 @@ def load_game_file(input_filename):
     return game_data
 
 
-def load_demo_file(input_filename):
+def load_demo_file(input_filename, verbose=False):
     # Read the TXT file containing the list of Steam demos
     #
     # Input:    input_filename
@@ -89,7 +90,8 @@ def load_demo_file(input_filename):
             else:
                 base_steam_store_url = "http://store.steampowered.com/app/"
                 demo_url = base_steam_store_url + appid
-                # print("[" + demo_name + "](" + demo_url + ")")
+                if verbose:
+                    print("[" + demo_name + "](" + demo_url + ")")
                 game_name = demo_name
 
             demo_data[appid] = dict()
@@ -129,20 +131,26 @@ def match_appid(game_data, demo_data):
 
     print('#demos not matched with any rated game=', len(unused_demo_data))
 
-    return (match_data, unused_demo_data)
+    return match_data, unused_demo_data
+
+
+def get_wilson_score(x):
+    return x["wilson_score"]
+
+
+def get_game_name(x):
+    return x["game_name"]
 
 
 def print_match_data(match_data, output_filename=None):
     base_steam_store_url = "http://store.steampowered.com/app/"
     steam_install_command = "steam://install/"
 
-    computeScore = lambda x: x["wilson_score"]
-
     # Rank all the Steam games
-    sortedValues = sorted(match_data.values(), key=computeScore, reverse=True)
+    sorted_values = sorted(match_data.values(), key=get_wilson_score, reverse=True)
 
     current_rank = 0
-    for game in sortedValues:
+    for game in sorted_values:
         game_appid = str(game["appid"])
         game_name = game["name"]
         demo_appid = str(game["demo_appid"])
@@ -165,13 +173,11 @@ def print_unmatched_data(unused_demo_data, output_filename=None):
     base_steam_store_url = "http://store.steampowered.com/app/"
     steam_install_command = "steam://install/"
 
-    computeScore = lambda x: x["game_name"]
-
     # Rank all the Steam games
-    sortedValues = sorted(unused_demo_data.values(), key=computeScore)
+    sorted_values = sorted(unused_demo_data.values(), key=get_game_name)
 
     current_rank = 0
-    for demo in sortedValues:
+    for demo in sorted_values:
         demo_appid = str(demo["appid"])
         game_name = demo["game_name"]
         current_rank += 1
@@ -199,10 +205,10 @@ def main():
 
     (matches, unused_demo_data) = match_appid(games, demos)
 
-    with open(output_filename, 'w', encoding="utf8") as outfile:
+    with open(output_filename, 'w', encoding="utf8") as _:
         print_match_data(matches, output_filename)
 
-    with open(error_filename, 'w', encoding="utf8") as outfile:
+    with open(error_filename, 'w', encoding="utf8") as _:
         print_unmatched_data(unused_demo_data, error_filename)
 
     return True
