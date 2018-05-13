@@ -10,7 +10,6 @@
   [Codecov]: https://codecov.io/gh/woctezuma/hidden-demos
   [Codecov image]: https://codecov.io/gh/woctezuma/hidden-demos/branch/master/graph/badge.svg
 
-
 This repository contains code to compute a ranking of Steam games which offer a demo.
 
 ## Game scoring ##
