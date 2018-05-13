@@ -1,4 +1,15 @@
-# Hidden Demos
+# Hidden Demos [![Build status][Build image]][Build] [![Updates][Dependency image]][PyUp] [![Python 3][Python3 image]][PyUp] [![Code coverage][Codecov image]][Codecov]
+
+  [Build]: https://travis-ci.org/woctezuma/hidden-demos
+  [Build image]: https://travis-ci.org/woctezuma/hidden-demos.svg?branch=master
+
+  [PyUp]: https://pyup.io/repos/github/woctezuma/hidden-demos/
+  [Dependency image]: https://pyup.io/repos/github/woctezuma/hidden-demos/shield.svg
+  [Python3 image]: https://pyup.io/repos/github/woctezuma/hidden-demos/python-3-shield.svg
+
+  [Codecov]: https://codecov.io/gh/woctezuma/hidden-demos
+  [Codecov image]: https://codecov.io/gh/woctezuma/hidden-demos/branch/master/graph/badge.svg
+
 
 This repository contains code to compute a ranking of Steam games which offer a demo.
 
