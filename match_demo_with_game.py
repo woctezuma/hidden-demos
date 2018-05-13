@@ -160,6 +160,7 @@ def print_match_data(match_data, output_filename=None):
                 print('{:04}'.format(current_rank) + ".\t[" + game_name + "](" + game_url + ")"
                       + " -> [demo](" + demo_url + ") + " + demo_install_command, file=outfile)
 
+
 def print_unmatched_data(unused_demo_data, output_filename=None):
     base_steam_store_url = "http://store.steampowered.com/app/"
     steam_install_command = "steam://install/"
@@ -187,7 +188,7 @@ def print_unmatched_data(unused_demo_data, output_filename=None):
                       + demo_url + ")  + " + demo_install_command, file=outfile)
 
 
-if __name__ == "__main__":
+def main():
     game_filename = "top_rated_games_on_steam.txt"
     demo_filename = "demo_on_steam.txt"
     output_filename = "wilson_ranking.txt"
@@ -203,3 +204,9 @@ if __name__ == "__main__":
 
     with open(error_filename, 'w', encoding="utf8") as outfile:
         print_unmatched_data(unused_demo_data, error_filename)
+
+    return True
+
+
+if __name__ == "__main__":
+    main()
