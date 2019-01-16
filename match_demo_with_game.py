@@ -15,6 +15,7 @@ def load_game_file(input_filename):
     # Input:    input_filename
     # - a text file, manually copied from SteamDB at steamdb_game_url:
     steamdb_game_url = 'https://steamdb.info/stats/gameratings/?all'
+    print('Please manually download data from: ' + steamdb_game_url)
     # NB: To download input_filename, you need to log in using your own Steam account on
     #     steamdb_game_url and then select to show all in the dropdown menu.
     #
@@ -50,6 +51,7 @@ def load_demo_file(input_filename, verbose=False):
     # Input:    input_filename
     # - a text file, manually copied from SteamDB at steamdb_demo_url:
     steamdb_demo_url = 'https://steamdb.info/search/?a=app&q=&type=3&category=0'
+    print('Please manually download data from: ' + steamdb_demo_url)
     # NB: To download input_filename, you need to log in using your own Steam account on
     #     steamdb_demo_url and then select to show all in the dropdown menu.
     #
