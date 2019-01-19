@@ -91,7 +91,7 @@ def load_demo_file(input_filename, verbose=False):
                 if verbose:
                     print('Demo name ends with a d:\t' + demo_name)
             else:
-                base_steam_store_url = 'http://store.steampowered.com/app/'
+                base_steam_store_url = 'https://store.steampowered.com/app/'
                 demo_url = base_steam_store_url + appid
                 if verbose:
                     print('Demo name is not explicit:\t' + '[' + demo_name + '](' + demo_url + ')')
@@ -146,7 +146,7 @@ def get_game_name(x):
 
 
 def print_match_data(match_data, output_filename=None):
-    base_steam_store_url = 'http://store.steampowered.com/app/'
+    base_steam_store_url = 'https://store.steampowered.com/app/'
     steam_install_command = 'steam://install/'
 
     # Rank all the Steam games
@@ -173,7 +173,7 @@ def print_match_data(match_data, output_filename=None):
 
 
 def print_unmatched_data(unused_demo_data, output_filename=None):
-    base_steam_store_url = 'http://store.steampowered.com/app/'
+    base_steam_store_url = 'https://store.steampowered.com/app/'
     steam_install_command = 'steam://install/'
 
     # Rank all the Steam games
