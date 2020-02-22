@@ -27,7 +27,6 @@ The data is included along the code in this repository, as downloaded on July 10
 This code is written in Python 3.
 
 ## Results ##
-* [ranking](https://gist.github.com/woctezuma/2f75a015928e3e500df1debe8a038b49) of games with demos.
 
 NB: As of July 10, there are 14262 games, 1953 demos, but only 1376 demos matched with rated games. Indeed, 577 demos could not be matched with any rated game:
 - 7 demos had weird names, from which I could not automatically infer the name of the original game,
@@ -39,8 +38,6 @@ NB: As of July 10, there are 14262 games, 1953 demos, but only 1376 demos matche
 	* [Chaos on Deponia](http://store.steampowered.com/app/224100)
 	* [Zombie Driver](http://store.steampowered.com/app/31419)
 - 570 demos could be matched, but the matched games were not yet released, a foritori not yet rated, and thus could not be ranked.
-
-* [list](https://gist.github.com/woctezuma/e449e14c3281d6ca78475c207012bf60) of demos which could not be matched to rated games.
 
 ## References ##
 * [a NeoGAF post](http://www.neogaf.com/forum/showpost.php?p=243096033&postcount=1579).
