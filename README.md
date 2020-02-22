@@ -28,7 +28,7 @@ This code is written in Python 3.
 
 ## Results ##
 
-NB: As of July 10, there are 14262 games, 1953 demos, but only 1376 demos matched with rated games. Indeed, 577 demos could not be matched with any rated game:
+As of July 10, there are 14262 games, 1953 demos, but only 1376 demos matched with rated games. Indeed, 577 demos could not be matched with any rated game:
 - 7 demos had weird names, from which I could not automatically infer the name of the original game,
 	* [ValveTestApp398280](http://store.steampowered.com/app/398280)
 	* [Thunderbird: The Introduction](http://store.steampowered.com/app/415520)
