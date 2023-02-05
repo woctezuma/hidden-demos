@@ -62,7 +62,6 @@ def load_demo_file(input_filename, verbose=False):
 
     with open(input_filename, 'r', encoding='utf8') as infile:
         for line in infile:
-
             items = line.strip().split('\t')
             stripped_items = list(map(str.strip, items))
 
@@ -70,9 +69,20 @@ def load_demo_file(input_filename, verbose=False):
             demo_name = stripped_items[2]
 
             # Keywords not included in other keywords
-            unambiguous_keywords = ['Demo', 'DEMO', 'demo', 'Christmas Edition',
-                                    'Free Trial', '[FREE TRIAL]', 'DirectX10 Trial', 'Lite',
-                                    'Pre-Alpha', 'Public Beta', 'Press', 'Playable Trailer']
+            unambiguous_keywords = [
+                'Demo',
+                'DEMO',
+                'demo',
+                'Christmas Edition',
+                'Free Trial',
+                '[FREE TRIAL]',
+                'DirectX10 Trial',
+                'Lite',
+                'Pre-Alpha',
+                'Public Beta',
+                'Press',
+                'Playable Trailer',
+            ]
             # Short keywords included in a few longer keywords
             ambiguous_keywords = ['Free', 'Beta']
 
@@ -94,7 +104,14 @@ def load_demo_file(input_filename, verbose=False):
                 base_steam_store_url = 'https://store.steampowered.com/app/'
                 demo_url = base_steam_store_url + appid
                 if verbose:
-                    print('Demo name is not explicit:\t' + '[' + demo_name + '](' + demo_url + ')')
+                    print(
+                        'Demo name is not explicit:\t'
+                        + '['
+                        + demo_name
+                        + ']('
+                        + demo_url
+                        + ')',
+                    )
                 game_name = demo_name
 
             demo_data[appid] = dict()
@@ -115,7 +132,11 @@ def match_appid(game_data, demo_data):
     for appid, game in game_data.items():
         game_true_name = game['name']
         if game_true_name in game_name_inferred_from_demo_name:
-            demo_appid = [v['appid'] for v in demo_data.values() if (v['game_name'] == game_true_name)]
+            demo_appid = [
+                v['appid']
+                for v in demo_data.values()
+                if (v['game_name'] == game_true_name)
+            ]
             match_data[appid] = game
             match_data[appid]['demo_appid'] = demo_appid[0]
 
@@ -164,12 +185,33 @@ def print_match_data(match_data, output_filename=None):
         demo_install_command = steam_install_command + demo_appid
 
         if output_filename is None:
-            print('{:04}'.format(current_rank) + '.\t[' + game_name + '](' + game_url + ')'
-                  + ' -> [demo](' + demo_url + ') + ' + demo_install_command)
+            print(
+                '{:04}'.format(current_rank)
+                + '.\t['
+                + game_name
+                + ']('
+                + game_url
+                + ')'
+                + ' -> [demo]('
+                + demo_url
+                + ') + '
+                + demo_install_command,
+            )
         else:
             with open(output_filename, 'a', encoding='utf8') as outfile:
-                print('{:04}'.format(current_rank) + '.\t[' + game_name + '](' + game_url + ')'
-                      + ' -> [demo](' + demo_url + ') + ' + demo_install_command, file=outfile)
+                print(
+                    '{:04}'.format(current_rank)
+                    + '.\t['
+                    + game_name
+                    + ']('
+                    + game_url
+                    + ')'
+                    + ' -> [demo]('
+                    + demo_url
+                    + ') + '
+                    + demo_install_command,
+                    file=outfile,
+                )
 
 
 def print_unmatched_data(unused_demo_data, output_filename=None):
@@ -189,12 +231,27 @@ def print_unmatched_data(unused_demo_data, output_filename=None):
         demo_install_command = steam_install_command + demo_appid
 
         if output_filename is None:
-            print('{:04}'.format(current_rank) + '.\t[' + game_name + ']('
-                  + demo_url + ')  + ' + demo_install_command)
+            print(
+                '{:04}'.format(current_rank)
+                + '.\t['
+                + game_name
+                + ']('
+                + demo_url
+                + ')  + '
+                + demo_install_command,
+            )
         else:
             with open(output_filename, 'a', encoding='utf8') as outfile:
-                print('{:04}'.format(current_rank) + '.\t[' + game_name + ']('
-                      + demo_url + ')  + ' + demo_install_command, file=outfile)
+                print(
+                    '{:04}'.format(current_rank)
+                    + '.\t['
+                    + game_name
+                    + ']('
+                    + demo_url
+                    + ')  + '
+                    + demo_install_command,
+                    file=outfile,
+                )
 
 
 def main(verbose=False):
