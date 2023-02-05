@@ -1,4 +1,5 @@
 # Objective: match the appid of demos and games.
+from pathlib import Path
 
 
 def to_integer(my_str):
@@ -24,7 +25,7 @@ def load_game_file(input_filename):
 
     game_data = {}
 
-    with open(input_filename, encoding='utf8') as infile:
+    with Path(input_filename).open(encoding='utf8') as infile:
         for line in infile:
             items = line.strip().split('\t')
             stripped_items = list(map(str.strip, items))
@@ -60,7 +61,7 @@ def load_demo_file(input_filename, verbose=False):
 
     demo_data = {}
 
-    with open(input_filename, encoding='utf8') as infile:
+    with Path(input_filename).open(encoding='utf8') as infile:
         for line in infile:
             items = line.strip().split('\t')
             stripped_items = list(map(str.strip, items))
@@ -198,7 +199,7 @@ def print_match_data(match_data, output_filename=None):
                 + demo_install_command,
             )
         else:
-            with open(output_filename, 'a', encoding='utf8') as outfile:
+            with Path(output_filename).open('a', encoding='utf8') as outfile:
                 print(
                     f'{current_rank:04}'
                     + '.\t['
@@ -241,7 +242,7 @@ def print_unmatched_data(unused_demo_data, output_filename=None):
                 + demo_install_command,
             )
         else:
-            with open(output_filename, 'a', encoding='utf8') as outfile:
+            with Path(output_filename).open('a', encoding='utf8') as outfile:
                 print(
                     f'{current_rank:04}'
                     + '.\t['
@@ -265,10 +266,10 @@ def main(verbose=False):
 
     (matches, unused_demo_data) = match_appid(games, demos)
 
-    with open(output_filename, 'w', encoding='utf8') as _:
+    with Path(output_filename).open('w', encoding='utf8') as _:
         print_match_data(matches, output_filename)
 
-    with open(error_filename, 'w', encoding='utf8') as _:
+    with Path(error_filename).open('w', encoding='utf8') as _:
         print_unmatched_data(unused_demo_data, error_filename)
 
     return True
