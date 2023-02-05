@@ -22,9 +22,9 @@ def load_game_file(input_filename):
     # Output:   game_data
     # - a Python dictionary
 
-    game_data = dict()
+    game_data = {}
 
-    with open(input_filename, 'r', encoding='utf8') as infile:
+    with open(input_filename, encoding='utf8') as infile:
         for line in infile:
             items = line.strip().split('\t')
             stripped_items = list(map(str.strip, items))
@@ -32,7 +32,7 @@ def load_game_file(input_filename):
             appid = stripped_items[1]
             game_name = stripped_items[2]
 
-            game_data[appid] = dict()
+            game_data[appid] = {}
             game_data[appid]['appid'] = to_integer(appid)
             game_data[appid]['name'] = game_name
             game_data[appid]['num_positive_reviews'] = to_integer(stripped_items[3])
@@ -58,9 +58,9 @@ def load_demo_file(input_filename, verbose=False):
     # Output:   demo_data
     # - a Python dictionary
 
-    demo_data = dict()
+    demo_data = {}
 
-    with open(input_filename, 'r', encoding='utf8') as infile:
+    with open(input_filename, encoding='utf8') as infile:
         for line in infile:
             items = line.strip().split('\t')
             stripped_items = list(map(str.strip, items))
@@ -114,7 +114,7 @@ def load_demo_file(input_filename, verbose=False):
                     )
                 game_name = demo_name
 
-            demo_data[appid] = dict()
+            demo_data[appid] = {}
             demo_data[appid]['appid'] = to_integer(appid)
             demo_data[appid]['name'] = demo_name
             demo_data[appid]['game_name'] = game_name
@@ -125,7 +125,7 @@ def load_demo_file(input_filename, verbose=False):
 
 
 def match_appid(game_data, demo_data):
-    match_data = dict()
+    match_data = {}
 
     game_name_inferred_from_demo_name = [v['game_name'] for v in demo_data.values()]
 
@@ -145,11 +145,11 @@ def match_appid(game_data, demo_data):
     # Demo data not matched with any rated game is usually due to the fact the game is not released yet, and thus is not
     # rated yet. Therefore, the game can exist and have a store page, but without being in top_rated_games_on_steam.txt.
 
-    unused_demo_data = dict()
+    unused_demo_data = {}
 
     appid_for_matched_demo = [v['demo_appid'] for v in match_data.values()]
 
-    for demo_appid_str in demo_data.keys():
+    for demo_appid_str in demo_data:
         if demo_data[demo_appid_str]['appid'] not in appid_for_matched_demo:
             unused_demo_data[demo_appid_str] = demo_data[demo_appid_str]
 
@@ -186,7 +186,7 @@ def print_match_data(match_data, output_filename=None):
 
         if output_filename is None:
             print(
-                '{:04}'.format(current_rank)
+                f'{current_rank:04}'
                 + '.\t['
                 + game_name
                 + ']('
@@ -200,7 +200,7 @@ def print_match_data(match_data, output_filename=None):
         else:
             with open(output_filename, 'a', encoding='utf8') as outfile:
                 print(
-                    '{:04}'.format(current_rank)
+                    f'{current_rank:04}'
                     + '.\t['
                     + game_name
                     + ']('
@@ -232,7 +232,7 @@ def print_unmatched_data(unused_demo_data, output_filename=None):
 
         if output_filename is None:
             print(
-                '{:04}'.format(current_rank)
+                f'{current_rank:04}'
                 + '.\t['
                 + game_name
                 + ']('
@@ -243,7 +243,7 @@ def print_unmatched_data(unused_demo_data, output_filename=None):
         else:
             with open(output_filename, 'a', encoding='utf8') as outfile:
                 print(
-                    '{:04}'.format(current_rank)
+                    f'{current_rank:04}'
                     + '.\t['
                     + game_name
                     + ']('
