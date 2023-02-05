@@ -3,8 +3,8 @@
 [![Build status][Build image]][Build]
 [![Code coverage][Codecov image]][Codecov]
 
-  [Build]: https://travis-ci.org/woctezuma/hidden-demos
-  [Build image]: https://travis-ci.org/woctezuma/hidden-demos.svg?branch=master
+  [Build]: <https://github.com/woctezuma/hidden-demos/actions>
+  [Build image]: <https://github.com/woctezuma/hidden-demos/workflows/Python package/badge.svg?branch=master>
 
   [PyUp]: https://pyup.io/repos/github/woctezuma/hidden-demos/
   [Dependency image]: https://pyup.io/repos/github/woctezuma/hidden-demos/shield.svg
